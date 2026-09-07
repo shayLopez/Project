@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,7 +10,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,11 +30,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 private Button eBt,sBt,sfgBt;
 private EditText nameEt,infoEt;
 private ImageView phtIv;
 private Uri selectedUri;
+private List<Item>itemList=new ArrayList<>();
 
 
 private ActivityResultLauncher<String> galleryLauncher;
@@ -83,12 +90,18 @@ eBt.setOnClickListener(V->addToList());
             infoEt.setError("Info is required");
         return;
         }
-        String uriString=selectedUri.toString();
-        if (uriString.isEmpty()) {
+
+        if (selectedUri==null) {
             Toast.makeText(MainActivity.this, "a picture is required", Toast.LENGTH_SHORT).show();
             return;
         }
-        //if (nameEt.getText().length()!=0&&infoEt.getText().length()!=0&&!uriString.isEmpty())
+        String uriString=selectedUri.toString();
+        if (nameEt.getText().length()!=0&&infoEt.getText().length()!=0&&!uriString.isEmpty())
+        {
+            Item tempitem=new Item(nameEt.toString(),infoEt.toString(),uriString);
+            itemList.add(tempitem);
+            clear();
+        }
 
     }
     private void insit()
@@ -99,5 +112,12 @@ eBt.setOnClickListener(V->addToList());
         infoEt=findViewById(R.id.editTextText2);
         phtIv=findViewById(R.id.imageView);
 
+    }
+    private void clear()
+    {
+        nameEt.setText("");
+        infoEt.setText("");
+       Drawable drawable = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_gallery);
+        phtIv.setImageDrawable(drawable);
     }
 }
