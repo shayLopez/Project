@@ -25,12 +25,14 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 private Button eBt,sBt,sfgBt;
 private EditText nameEt,infoEt;
 private ImageView phtIv;
 private Uri selectedUri;
+
 
 private ActivityResultLauncher<String> galleryLauncher;
     @Override
@@ -50,7 +52,7 @@ private ActivityResultLauncher<String> galleryLauncher;
         registerLaunchers();
         sfgBt.setOnClickListener(v -> chooseFromGallery());
 eBt.setOnClickListener(V->addToList());
-//test
+//
 
 
 
@@ -82,8 +84,12 @@ eBt.setOnClickListener(V->addToList());
         return;
         }
         String uriString=selectedUri.toString();
-        if (uriString.isEmpty())
+        if (uriString.isEmpty()) {
+            Toast.makeText(MainActivity.this, "a picture is required", Toast.LENGTH_SHORT).show();
             return;
+        }
+        //if (nameEt.getText().length()!=0&&infoEt.getText().length()!=0&&!uriString.isEmpty())
+
     }
     private void insit()
     {   sfgBt=findViewById(R.id.button3);
