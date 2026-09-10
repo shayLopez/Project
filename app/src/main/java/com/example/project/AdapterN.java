@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AdapterN extends RecyclerView.Adapter<AdapterN.ViewHolderN> {
     private ArrayList<Item> itemlist;
@@ -23,12 +22,20 @@ public class AdapterN extends RecyclerView.Adapter<AdapterN.ViewHolderN> {
     @NonNull
     @Override
     public ViewHolderN onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View rowView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.rclview, parent, false);
+        return new ViewHolderN(rowView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderN holder, int position) {
+        Item item = itemlist.get(position);
 
+        holder.nameTv.setText(item.getName());
+        holder.infoTv.setText(item.getInfo());
+
+        Uri uri = Uri.parse(item.getUri());
+        holder.phtIv.setImageURI(uri);
     }
 
     @Override
@@ -36,46 +43,15 @@ public class AdapterN extends RecyclerView.Adapter<AdapterN.ViewHolderN> {
         return itemlist.size();
     }
 
-    public static class ViewHolderN extends RecyclerView.ViewHolder{
-      public TextView nameTv,infoTv;
-     public ImageView phtIv;
-      public ViewHolderN(View itemView)
-      {
-           super(itemView);
-      }
-   }
-    public class ItemViewHolder
-            extends RecyclerView.ViewHolder {
-        ImageView ivPhoto;
-        TextView tvTitle;
-        TextView tvDescription;
-        @NonNull
-        public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public static class ViewHolderN extends RecyclerView.ViewHolder {
+        public TextView nameTv, infoTv;
+        public ImageView phtIv;
 
-            View rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.rclview, parent, false);
-
-            return new ItemViewHolder(rowView);
-        }
-        public ItemViewHolder(@NonNull View rowView)
-        {
-            super(rowView);
-
-            ivPhoto = rowView.findViewById(R.id.OphtIv);
-            tvTitle = rowView.findViewById(R.id.OnameTv);
-            tvDescription = rowView.findViewById(R.id.OinfoIv);
-
-        }
-
-        public void onBindViewHolder(@NonNull ItemViewHolder holder, int position)
-        {
-
-            Item item = itemlist.get(position);
-
-            holder.tvTitle.setText(item.getName());
-            holder.tvDescription.setText(item.getInfo());
-
-            Uri uri = Uri.parse(item.getUri());
-            holder.ivPhoto.setImageURI(uri);
+        public ViewHolderN(@NonNull View itemView) {
+            super(itemView);
+            nameTv = itemView.findViewById(R.id.OnameTv);
+            infoTv = itemView.findViewById(R.id.OinfoIv);
+            phtIv = itemView.findViewById(R.id.OphtIv);
         }
     }
 }

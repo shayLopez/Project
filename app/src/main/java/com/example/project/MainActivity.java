@@ -101,7 +101,7 @@ sBt.setOnClickListener(V->goToNext());
         String uriString=selectedUri.toString();
         if (nameEt.getText().length()!=0&&infoEt.getText().length()!=0&&!uriString.isEmpty())
         {
-            Item tempitem=new Item(nameEt.toString(),infoEt.toString(),uriString);
+            Item tempitem=new Item(nameEt.getText().toString(),infoEt.getText().toString(),uriString);
             itemList.add(tempitem);
             clear();
         }
