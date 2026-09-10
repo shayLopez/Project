@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,7 +39,8 @@ private Button eBt,sBt,sfgBt;
 private EditText nameEt,infoEt;
 private ImageView phtIv;
 private Uri selectedUri;
-private List<Item>itemList=new ArrayList<>();
+private ArrayList<Item>itemList=new ArrayList<>();
+Intent intent;
 
 
 private ActivityResultLauncher<String> galleryLauncher;
@@ -59,6 +61,7 @@ private ActivityResultLauncher<String> galleryLauncher;
         registerLaunchers();
         sfgBt.setOnClickListener(v -> chooseFromGallery());
 eBt.setOnClickListener(V->addToList());
+sBt.setOnClickListener(V->goToNext());
 //
 
 
@@ -119,5 +122,11 @@ eBt.setOnClickListener(V->addToList());
         infoEt.setText("");
        Drawable drawable = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_gallery);
         phtIv.setImageDrawable(drawable);
+    }
+    private void goToNext()
+    {
+        intent=new Intent(MainActivity.this,MainActivity2.class);
+        intent.putExtra("list",itemList);
+        startActivity(intent);
     }
 }
