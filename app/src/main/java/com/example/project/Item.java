@@ -4,7 +4,24 @@ import java.io.Serializable;
 
 public class Item implements Serializable {
     private String name,info,uri;
-    public Item(String name,String info,String uri)
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Item(int id, String name, String info, String uri) {
+        this.id = id;
+        this.name=name;
+        this.info=info;
+        this.uri=uri;
+    }
+
+    public Item(String name, String info, String uri)
     {
         this.name=name;
         this.info=info;

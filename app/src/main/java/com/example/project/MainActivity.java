@@ -41,6 +41,7 @@ private ImageView phtIv;
 private Uri selectedUri;
 private ArrayList<Item>itemList=new ArrayList<>();
 Intent intent;
+HelperDB hlp=new HelperDB(this);
 
 
 private ActivityResultLauncher<String> galleryLauncher;

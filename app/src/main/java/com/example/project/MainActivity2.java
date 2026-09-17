@@ -1,6 +1,7 @@
 package com.example.project;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,4 +41,6 @@ private Intent intent;
         AdapterN adapter = new AdapterN(itList);
         itemsRc.setAdapter(adapter);
     }
+
+
 }
