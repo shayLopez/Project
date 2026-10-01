@@ -19,11 +19,12 @@ import java.util.ArrayList;
 public class MainActivity2 extends AppCompatActivity {
 private ArrayList <Item>itList=new ArrayList<>();
 private RecyclerView itemsRc;
+private HelperDB hlpD;
 private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        hlpD=new HelperDB(this);
         setContentView(R.layout.output);
         inits();
         setupRecyclerView();
@@ -32,12 +33,13 @@ private Intent intent;
     private void inits()
     {
      intent=getIntent();
-     itList= (ArrayList<Item>) intent.getSerializableExtra("list");
+    // itList= (ArrayList<Item>) intent.getSerializableExtra("list");
      itemsRc=findViewById(R.id.Rv);
     }
     private void setupRecyclerView()
     {
         itemsRc.setLayoutManager(new LinearLayoutManager(this));
+        itList=hlpD.getAllItems();
         AdapterN adapter = new AdapterN(itList);
         itemsRc.setAdapter(adapter);
     }

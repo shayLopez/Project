@@ -103,6 +103,7 @@ sBt.setOnClickListener(V->goToNext());
         if (nameEt.getText().length()!=0&&infoEt.getText().length()!=0&&!uriString.isEmpty())
         {
             Item tempitem=new Item(nameEt.getText().toString(),infoEt.getText().toString(),uriString);
+            hlp.addItem(tempitem);
             itemList.add(tempitem);
             clear();
         }

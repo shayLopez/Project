@@ -15,18 +15,22 @@ public class HelperDB extends SQLiteOpenHelper
     private static final String TABLE_ITEMS = "items";
     private static final String COL_ID = "id";
     private static final String COL_TITLE="title";
-    private static final String COL_DESCRIPTION = "description"; private static final String COL_IMAGE_URI= "imageUriString";
+    private static final String COL_DESCRIPTION = "description";
+    private static final String COL_IMAGE_URI= "imageUriString";
     public HelperDB (Context context)
     {
+
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_ITEMS + " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+ COL_TITLE + " TEXT, "
+        String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_ITEMS + " ("
+                + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COL_TITLE + " TEXT, "
                 + COL_DESCRIPTION +" TEXT, "
-                + COL_IMAGE_URI +"TEXT)";
+                + COL_IMAGE_URI +" TEXT)";
 
                 db.execSQL(sql);
     }
@@ -52,7 +56,7 @@ public class HelperDB extends SQLiteOpenHelper
     {
         ArrayList<Item>items=new ArrayList<>();
         SQLiteDatabase db=getReadableDatabase();
-        Cursor cursor=db.rawQuery("SELECT "+COL_ID+", "+COL_TITLE+","+COL_DESCRIPTION+","+COL_IMAGE_URI+"FROM"+TABLE_ITEMS,null);
+        Cursor cursor=db.rawQuery("SELECT "+ COL_ID+", "+ COL_TITLE+", "+ COL_DESCRIPTION+", "+ COL_IMAGE_URI+" FROM "+TABLE_ITEMS,null);
     while (cursor.moveToNext())
     {
         items.add(curserToItem(cursor));
@@ -71,10 +75,12 @@ public class HelperDB extends SQLiteOpenHelper
         values.put(COL_IMAGE_URI,uri);
 
         db.update(TABLE_ITEMS,values,COL_ID+"=?",new String[]{String.valueOf(id)});
+        db.close();
     }
     public void deleteItem(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
         db.delete(TABLE_ITEMS,COL_ID+"=?",new String[]{String.valueOf(id)});
+        db.close();
     }
 }
