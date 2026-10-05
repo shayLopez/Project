@@ -83,4 +83,17 @@ public class HelperDB extends SQLiteOpenHelper
         db.delete(TABLE_ITEMS,COL_ID+"=?",new String[]{String.valueOf(id)});
         db.close();
     }
+    public ArrayList<Item> getItemsByTitle(String title)
+    {
+        ArrayList<Item>items=new ArrayList<>();
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.rawQuery("SELECT "+ COL_ID +", "+ COL_TITLE +", "+COL_DESCRIPTION +", "+ COL_IMAGE_URI + " FROM " +TABLE_ITEMS +" WHERE "+COL_TITLE + "= ?",new String[]{title});
+        while (cursor.moveToNext())
+        {
+            items.add(curserToItem(cursor));
+        }
+        cursor.close();
+        db.close();
+        return items;
+    }
 }

@@ -5,8 +5,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.ViewTreeOnBackPressedDispatcherOwner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,6 +24,8 @@ private ArrayList <Item>itList=new ArrayList<>();
 private RecyclerView itemsRc;
 private HelperDB hlpD;
 private Intent intent;
+private Button searchBt,SeeAllBt;
+private EditText sEt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +33,8 @@ private Intent intent;
         setContentView(R.layout.output);
         inits();
         setupRecyclerView();
+        searchBt.setOnClickListener(V->searchBy());
+        SeeAllBt.setOnClickListener(V ->seeAll());
 
     }
     private void inits()
@@ -35,6 +42,26 @@ private Intent intent;
      intent=getIntent();
     // itList= (ArrayList<Item>) intent.getSerializableExtra("list");
      itemsRc=findViewById(R.id.Rv);
+     searchBt=findViewById(R.id.button4);
+     SeeAllBt=findViewById(R.id.button5);
+     sEt=findViewById(R.id.editTextText3);
+    }
+    private void searchBy()
+    {
+       ArrayList <Item> itemsL=new ArrayList<>();
+        if (sEt.getText().length()==0)
+            sEt.setError("Empty");
+        else
+        {
+            itemsL = hlpD.getItemsByTitle(sEt.getText().toString());
+            AdapterN adapter = new AdapterN(itemsL);
+            itemsRc.setAdapter(adapter);
+        }
+    }
+    private void seeAll()
+    {
+        AdapterN adapter = new AdapterN(itList);
+        itemsRc.setAdapter(adapter);
     }
     private void setupRecyclerView()
     {

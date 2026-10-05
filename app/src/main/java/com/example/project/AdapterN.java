@@ -1,9 +1,11 @@
 package com.example.project;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +38,11 @@ public class AdapterN extends RecyclerView.Adapter<AdapterN.ViewHolderN> {
 
         Uri uri = Uri.parse(item.getUri());
         holder.phtIv.setImageURI(uri);
+        holder.eBt.setOnClickListener(V ->{
+            Intent intent=new Intent(V.getContext(),EditActivity.class);
+            intent.putExtra("ItemId",item.getId());
+            V.getContext().startActivity(intent);
+        });
     }
 
     @Override
@@ -46,12 +53,14 @@ public class AdapterN extends RecyclerView.Adapter<AdapterN.ViewHolderN> {
     public static class ViewHolderN extends RecyclerView.ViewHolder {
         public TextView nameTv, infoTv;
         public ImageView phtIv;
+        public Button eBt;
 
         public ViewHolderN(@NonNull View itemView) {
             super(itemView);
             nameTv = itemView.findViewById(R.id.OnameTv);
             infoTv = itemView.findViewById(R.id.OinfoIv);
             phtIv = itemView.findViewById(R.id.OphtIv);
+            eBt=itemView.findViewById(R.id.editB);
         }
     }
 }
