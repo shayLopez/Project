@@ -77,6 +77,27 @@ public class HelperDB extends SQLiteOpenHelper
         db.update(TABLE_ITEMS,values,COL_ID+"=?",new String[]{String.valueOf(id)});
         db.close();
     }
+    public void flexUpdt(int id,String newTitle,String newInfo)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        ContentValues values=new ContentValues();
+        if (newInfo.isEmpty()&&newTitle.isEmpty())
+        {
+            db.close();
+            return;
+        }
+        if (!newTitle.isEmpty())
+        {
+            values.put(COL_TITLE,newTitle);
+        }
+        if (!newInfo.isEmpty())
+        {
+            values.put(COL_DESCRIPTION,newInfo);
+        }
+        db.update(TABLE_ITEMS,values,COL_ID+" = ?",new String[]{String.valueOf(id)}
+        );
+        db.close();
+    }
     public void deleteItem(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
@@ -95,5 +116,24 @@ public class HelperDB extends SQLiteOpenHelper
         cursor.close();
         db.close();
         return items;
+    }
+    public Item getItemById(int id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cursor=db.rawQuery(
+                "SELECT " +COL_ID +", " + COL_TITLE + ", "
+                + COL_DESCRIPTION + ", " + COL_IMAGE_URI
+                + " FROM " + TABLE_ITEMS
+                +" WHERE " + COL_ID + " =?",
+                new String[]{String.valueOf(id)}
+        );
+        Item item=null;
+        if (cursor.moveToFirst())
+        {
+            item=curserToItem(cursor);
+        }
+        cursor.close();
+        db.close();
+        return  item;
     }
 }

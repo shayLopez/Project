@@ -1,5 +1,8 @@
 package com.example.project;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +16,10 @@ import androidx.core.view.WindowInsetsCompat;
 public class EditActivity extends AppCompatActivity {
     private Button updBt,deleteBt;
     private EditText nameEt,infoEt;
+    private Intent intent;
+    private int id;
+    private  Item item;
+    private HelperDB hlp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,5 +31,18 @@ public class EditActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        insit();
+        item=hlp.getItemById(id);
+        updBt.setOnClickListener(V -> hlp.flexUpdt(item.getId(),nameEt.getText().toString(),infoEt.getText().toString()));
+    }
+    private  void  insit()
+    {
+        updBt=findViewById(R.id.button7);
+        deleteBt=findViewById(R.id.button6);
+        nameEt=findViewById(R.id.editTextText4);
+        infoEt=findViewById(R.id.editTextText5);
+        intent=getIntent();
+         id=getIntent().getIntExtra("itemId",-1);
+
     }
 }
