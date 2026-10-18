@@ -24,6 +24,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.project.databinding.ActivityMainBinding;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;

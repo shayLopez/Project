@@ -4,6 +4,8 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -20,6 +22,7 @@ public class EditActivity extends AppCompatActivity {
     private int id;
     private  Item item;
     private HelperDB hlp;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,8 @@ public class EditActivity extends AppCompatActivity {
         });
         insit();
         item=hlp.getItemById(id);
-        updBt.setOnClickListener(V -> hlp.flexUpdt(item.getId(),nameEt.getText().toString(),infoEt.getText().toString()));
+        updBt.setOnClickListener(V -> saveUpdt());
+        deleteBt.setOnClickListener(V -> deleteCur());
     }
     private  void  insit()
     {
@@ -44,5 +48,20 @@ public class EditActivity extends AppCompatActivity {
         intent=getIntent();
          id=getIntent().getIntExtra("itemId",-1);
 
+    }
+    private void deleteCur()
+    {
+        hlp.deleteItem(item.getId());
+        goBack();
+    }
+    private void saveUpdt()
+    {
+        hlp.flexUpdt(item.getId(),nameEt.getText().toString(),infoEt.getText().toString());
+        goBack();
+    }
+    private void goBack()
+    {
+        intent=new Intent(EditActivity.this,MainActivity2.class);
+        startActivity(intent);
     }
 }
