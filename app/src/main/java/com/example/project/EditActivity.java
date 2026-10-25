@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class EditActivity extends AppCompatActivity {
     private Button updBt,deleteBt;
     private EditText nameEt,infoEt;
+    private TextView nameTv,infoTv;
     private Intent intent;
     private int id;
     private  Item item;
@@ -27,17 +30,16 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_edit);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        hlp = new HelperDB(this);
         insit();
+        loadSelectedItem();
+
         item=hlp.getItemById(id);
-        updBt.setOnClickListener(V -> saveUpdt());
-        deleteBt.setOnClickListener(V -> deleteCur());
+        updBt.setOnClickListener(V -> saveChanges());
+        deleteBt.setOnClickListener(V -> deleteCurrentItem());
     }
     private  void  insit()
     {
@@ -45,8 +47,10 @@ public class EditActivity extends AppCompatActivity {
         deleteBt=findViewById(R.id.button6);
         nameEt=findViewById(R.id.editTextText4);
         infoEt=findViewById(R.id.editTextText5);
+        nameTv=findViewById(R.id.textView3);
+        infoTv=findViewById(R.id.textView4);
         intent=getIntent();
-         id=getIntent().getIntExtra("itemId",-1);
+        id=getIntent().getIntExtra("ItemId",-1);
 
     }
     private void deleteCur()
@@ -64,4 +68,43 @@ public class EditActivity extends AppCompatActivity {
         intent=new Intent(EditActivity.this,MainActivity2.class);
         startActivity(intent);
     }
+    private void loadSelectedItem() {
+        new Thread(() -> {
+            Item loadedItem = hlp.getItemById(id);
+            handler.post(() -> {
+                if (loadedItem == null) {
+                    finish();
+                    return;
+                }
+                item = loadedItem;
+                nameTv.setText(item.getName());
+                infoTv.setText(item.getInfo());
+            });
+        }).start();
+    }
+    private void saveChanges() {
+        String newTitle = nameEt.getText().toString();
+        String newDescription = infoEt.getText().toString();
+        if (nameEt.getText().toString().isEmpty()&&infoEt.getText().toString().isEmpty())
+            return;
+
+        new Thread(() -> {
+            hlp.flexUpdt(item.getId(), newTitle, newDescription);
+            handler.post(() -> {
+                Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+                finish();
+            });
+        }).start();
+    }
+    private void deleteCurrentItem() {
+
+        new Thread(() -> {
+            hlp.deleteItem(item.getId());
+            handler.post(() -> {
+                Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+                finish();
+            });
+        }).start();
+    }
+
 }

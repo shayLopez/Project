@@ -28,16 +28,18 @@ private HelperDB hlpD;
 private Intent intent;
 private Button searchBt,SeeAllBt;
 private EditText sEt;
-    private Handler handler = new Handler(Looper.getMainLooper());
+
+private Handler handler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hlpD=new HelperDB(this);
+
         setContentView(R.layout.output);
+        hlpD=new HelperDB(this);
         inits();
         setupRecyclerView();
-        searchBt.setOnClickListener(V->searchBy());
-        SeeAllBt.setOnClickListener(V ->seeAll());
+        searchBt.setOnClickListener(V->searchItems());
+        SeeAllBt.setOnClickListener(V ->showAllItems());
 
     }
     private void inits()
@@ -61,10 +63,32 @@ private EditText sEt;
             itemsRc.setAdapter(adapter);
         }
     }
+    private void searchItems() {
+        String title =
+                sEt.getText().toString();
+        new Thread(() -> {
+            ArrayList<Item> results = hlpD.getItemsByTitle(title);
+            handler.post(() -> {
+                itList =results;
+                AdapterN adapter = new AdapterN(itList);
+                itemsRc.setAdapter(adapter);
+            });
+        }).start();
+    }
     private void seeAll()
     {
         AdapterN adapter = new AdapterN(itList);
         itemsRc.setAdapter(adapter);
+    }
+    private void showAllItems() {
+        new Thread(() -> {
+            ArrayList<Item> newItems = hlpD.getAllItems();
+            handler.post(() -> {
+                itList = newItems;
+                AdapterN adapter = new AdapterN(itList);
+                itemsRc.setAdapter(adapter);
+            });
+        }).start();
     }
     private void setupRecyclerView()
     {
